@@ -38,6 +38,17 @@ struct Project {
     name: String,
     ver: String,
 }`;
+
+const v = "version";
+const cargoTomlExample = `[package]
+name = "mon_projet"
+${v} = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Ajoute tes dependances ici
+# serde = "1.0"
+# tokio = { ${v} = "1", features = ["full"] }`;
 ---
 
 <LessonLayout {...lessonInfo}>
@@ -111,15 +122,7 @@ struct Project {
 
   <div class="not-prose my-6">
     <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm">
-      <pre class="text-gray-300">[package]
-name = "mon_projet"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-# Ajoute tes dependances ici
-# serde = "1.0"
-# tokio = { version = "1", features = ["full"] }</pre>
+      <pre class="text-gray-300" set:text={cargoTomlExample}></pre>
     </div>
   </div>
 
