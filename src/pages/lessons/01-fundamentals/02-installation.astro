@@ -11,6 +11,33 @@ const lessonInfo = {
   prevLesson: { id: "01-introduction", title: "Introduction a Rust" },
   nextLesson: { id: "03-variables", title: "Variables et Mutabilite" }
 };
+
+const playgroundCode = `// Ce code utilise la crate "rand"
+// (deja disponible dans le playground)
+// En local : cargo add rand
+
+fn main() {
+    // Simule une structure de projet Cargo
+    let project = Project {
+        name: String::from("mon_super_projet"),
+        ver: String::from("0.1.0"),
+    };
+
+    println!("Projet: {} v{}", project.name, project.ver);
+    println!("Edition: 2021");
+
+    // Simule des dependances
+    let deps = vec!["serde", "tokio", "reqwest"];
+    println!("\\nDependances:");
+    for dep in deps {
+        println!("  - {}", dep);
+    }
+}
+
+struct Project {
+    name: String,
+    ver: String,
+}`;
 ---
 
 <LessonLayout {...lessonInfo}>
@@ -201,32 +228,7 @@ edition = "2021"
     <RustPlayground
       client:only="react"
       title="Test Cargo concepts"
-      initialCode={`// Ce code utilise la crate "rand"
-// (deja disponible dans le playground)
-// En local : cargo add rand
-
-fn main() {
-    // Simule une structure de projet Cargo
-    let project = Project {
-        name: String::from("mon_super_projet"),
-        version: String::from("0.1.0"),
-    };
-
-    println!("Projet: {} v{}", project.name, project.version);
-    println!("Edition: 2021");
-
-    // Simule des dependances
-    let deps = vec!["serde", "tokio", "reqwest"];
-    println!("\\nDependances:");
-    for dep in deps {
-        println!("  - {}", dep);
-    }
-}
-
-struct Project {
-    name: String,
-    version: String,
-}`}
+      initialCode={playgroundCode}
     />
   </div>
 
