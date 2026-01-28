@@ -1,0 +1,327 @@
+---
+import LessonLayout from '../../../layouts/LessonLayout.astro';
+import { RustPlayground } from '../../../components/editor/RustPlayground';
+
+const lessonInfo = {
+  title: "Types de Donnees",
+  description: "Decouvre le systeme de types strict de Rust et ses types primitifs",
+  moduleId: "01-fundamentals",
+  moduleName: "Fondamentaux",
+  lessonId: "04-types",
+  prevLesson: { id: "03-variables", title: "Variables et Mutabilite" },
+  nextLesson: { id: "05-functions", title: "Fonctions" }
+};
+---
+
+<LessonLayout {...lessonInfo}>
+  <h2>Typage statique et inference</h2>
+
+  <p>
+    Rust est un langage a <strong>typage statique</strong> : chaque variable a un type connu a la compilation.
+    Mais grace a l'<strong>inference de types</strong>, tu n'as pas besoin de tout annoter.
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // Inference : Rust devine le type
+    let x = 5;          // i32 (par defaut)
+    let y = 3.14;       // f64 (par defaut)
+    let active = true;  // bool
+    let letter = 'R';   // char
+
+    // Annotation explicite
+    let z: i64 = 1000;
+    let pi: f32 = 3.14;
+
+    println!("x: {}, y: {}, z: {}", x, y, z);
+    println!("active: {}, letter: {}", active, letter);
+}`}
+    />
+  </div>
+
+  <h2>Types entiers</h2>
+
+  <p>Rust offre des entiers de differentes tailles, signes ou non :</p>
+
+  <div class="not-prose my-8 overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <th class="text-left py-3 px-4 font-semibold">Taille</th>
+          <th class="text-left py-3 px-4 font-semibold text-green-500">Signe</th>
+          <th class="text-left py-3 px-4 font-semibold text-blue-500">Non-signe</th>
+          <th class="text-left py-3 px-4 font-semibold">Plage (signe)</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 dark:text-gray-400 font-mono">
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">8 bits</td>
+          <td class="py-3 px-4 text-green-500">i8</td>
+          <td class="py-3 px-4 text-blue-500">u8</td>
+          <td class="py-3 px-4">-128 a 127</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">16 bits</td>
+          <td class="py-3 px-4 text-green-500">i16</td>
+          <td class="py-3 px-4 text-blue-500">u16</td>
+          <td class="py-3 px-4">-32768 a 32767</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">32 bits</td>
+          <td class="py-3 px-4 text-green-500">i32</td>
+          <td class="py-3 px-4 text-blue-500">u32</td>
+          <td class="py-3 px-4">~-2 milliards a ~2 milliards</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">64 bits</td>
+          <td class="py-3 px-4 text-green-500">i64</td>
+          <td class="py-3 px-4 text-blue-500">u64</td>
+          <td class="py-3 px-4">Tres grand</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">128 bits</td>
+          <td class="py-3 px-4 text-green-500">i128</td>
+          <td class="py-3 px-4 text-blue-500">u128</td>
+          <td class="py-3 px-4">Enorme</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4">Archi</td>
+          <td class="py-3 px-4 text-green-500">isize</td>
+          <td class="py-3 px-4 text-blue-500">usize</td>
+          <td class="py-3 px-4">Depend du CPU</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // Differentes facons d'ecrire des nombres
+    let decimal = 98_222;      // Underscores pour lisibilite
+    let hex = 0xff;            // Hexadecimal
+    let octal = 0o77;          // Octal
+    let binary = 0b1111_0000;  // Binaire
+    let byte = b'A';           // Byte (u8 seulement)
+
+    println!("decimal: {}", decimal);
+    println!("hex: {} (0xff)", hex);
+    println!("octal: {} (0o77)", octal);
+    println!("binary: {} (0b1111_0000)", binary);
+    println!("byte: {} (b'A')", byte);
+
+    // Types signes vs non-signes
+    let signed: i8 = -10;
+    let unsigned: u8 = 255;
+    println!("signed i8: {}, unsigned u8: {}", signed, unsigned);
+}`}
+    />
+  </div>
+
+  <h2>Types flottants</h2>
+
+  <p>Deux types de nombres a virgule flottante :</p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    let f32_num: f32 = 3.14;    // 32 bits, moins precis
+    let f64_num: f64 = 3.14159; // 64 bits, par defaut
+
+    // Operations mathematiques
+    let sum = 5.0 + 2.5;
+    let difference = 10.0 - 3.5;
+    let product = 4.0 * 2.5;
+    let quotient = 10.0 / 3.0;
+
+    println!("f32: {}, f64: {}", f32_num, f64_num);
+    println!("sum: {}, diff: {}", sum, difference);
+    println!("product: {}, quotient: {}", product, quotient);
+
+    // Attention: pas de conversion implicite!
+    // let mixed = f32_num + f64_num;  // ERREUR!
+    let mixed = f32_num as f64 + f64_num;  // OK avec cast
+    println!("mixed (cast): {}", mixed);
+}`}
+    />
+  </div>
+
+  <h2>Booleens et Caracteres</h2>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // Booleens
+    let t: bool = true;
+    let f = false;
+
+    println!("true AND false = {}", t && f);
+    println!("true OR false = {}", t || f);
+    println!("NOT true = {}", !t);
+
+    // Caracteres (4 bytes - supporte Unicode!)
+    let c = 'z';
+    let emoji = '🦀';  // Le crabe Rust!
+    let heart = '❤';
+    let kanji = '日';
+
+    println!("Caracteres: {} {} {} {}", c, emoji, heart, kanji);
+
+    // char vs String
+    let char_r: char = 'R';       // Un seul caractere
+    let string_r: &str = "R";     // Une chaine (slice)
+    println!("char: {}, str: {}", char_r, string_r);
+}`}
+    />
+  </div>
+
+  <h2>Tuples</h2>
+
+  <p>Les tuples groupent plusieurs valeurs de types differents :</p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // Tuple avec types differents
+    let tup: (i32, f64, char) = (500, 6.4, 'R');
+
+    // Destructuring
+    let (x, y, z) = tup;
+    println!("x: {}, y: {}, z: {}", x, y, z);
+
+    // Acces par index
+    let first = tup.0;
+    let second = tup.1;
+    let third = tup.2;
+    println!("Index: {}, {}, {}", first, second, third);
+
+    // Tuple unit (vide)
+    let unit: () = ();
+    println!("Unit tuple: {:?}", unit);
+}`}
+    />
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+    <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3">En Dart/Swift</h3>
+    <p class="text-gray-700 dark:text-gray-300">
+      Dart n'a pas de tuples natifs (tu utilises des classes ou Records).
+      Swift a des tuples similaires : <code>let tup = (500, 6.4, "R")</code>
+    </p>
+  </div>
+
+  <h2>Arrays (tableaux)</h2>
+
+  <p>
+    Les arrays ont une <strong>taille fixe</strong> et des elements du <strong>meme type</strong> :
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // Array de 5 entiers
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+
+    // Acces par index
+    println!("Premier: {}", arr[0]);
+    println!("Dernier: {}", arr[4]);
+
+    // Array avec valeur repetee
+    let zeros = [0; 10];  // [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    println!("Zeros: {:?}", zeros);
+
+    // Longueur
+    println!("Longueur de arr: {}", arr.len());
+
+    // Iteration
+    for element in arr {
+        print!("{} ", element);
+    }
+    println!();
+
+    // ATTENTION: l'acces hors limites cause une panique!
+    // let crash = arr[10];  // Panic a runtime!
+}`}
+    />
+  </div>
+
+  <h2>String vs &str</h2>
+
+  <p>
+    En Rust, il y a deux types de chaines - c'est un point important pour l'ownership :
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // &str - string slice, reference immutable
+    let slice: &str = "Hello";  // Stocke dans le binaire
+
+    // String - string sur le heap, mutable et owned
+    let mut owned: String = String::from("Hello");
+    owned.push_str(", World!");
+
+    println!("slice: {}", slice);
+    println!("owned: {}", owned);
+
+    // Conversion
+    let from_slice: String = slice.to_string();
+    let to_slice: &str = &owned;
+
+    println!("from_slice: {}", from_slice);
+    println!("to_slice: {}", to_slice);
+}`}
+    />
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-rust-50 dark:bg-rust-900/20 rounded-xl border border-rust-200 dark:border-rust-800">
+    <h3 class="text-lg font-semibold text-rust-700 dark:text-rust-400 mb-3">String vs &str - A retenir</h3>
+    <div class="text-gray-700 dark:text-gray-300 space-y-2">
+      <p><code>&str</code> : Reference a une chaine existante (lecture seule)</p>
+      <p><code>String</code> : Chaine que tu possedes (peut etre modifiee)</p>
+      <p class="mt-4 text-sm">On verra ca en detail dans le module Ownership!</p>
+    </div>
+  </div>
+
+  <h2>Exercice : Les types en action</h2>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      title="Exercice"
+      description="Complete les declarations de type"
+      initialCode={`fn main() {
+    // 1. Declare un entier non-signe 8 bits avec la valeur 255
+
+    // 2. Declare un tuple (nom: &str, age: u8, score: f32)
+
+    // 3. Cree un array de 3 booleens
+
+    // 4. Cree une String a partir de "Rust"
+
+    // Verification
+    println!("Termine l'exercice!");
+}`}
+    />
+  </div>
+
+  <h2>Points cles</h2>
+
+  <ul>
+    <li>Rust a un <strong>typage statique fort</strong> avec inference</li>
+    <li>Entiers : <code>i8</code> a <code>i128</code> (signes) et <code>u8</code> a <code>u128</code> (non-signes)</li>
+    <li>Flottants : <code>f32</code> et <code>f64</code> (defaut)</li>
+    <li><code>char</code> = 4 bytes, supporte tout Unicode</li>
+    <li>Tuples : groupent des types differents <code>(i32, bool, char)</code></li>
+    <li>Arrays : taille fixe, meme type <code>[i32; 5]</code></li>
+    <li><code>&str</code> vs <code>String</code> : on approfondira avec l'Ownership!</li>
+  </ul>
+</LessonLayout>

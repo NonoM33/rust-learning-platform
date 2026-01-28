@@ -1,0 +1,246 @@
+---
+import LessonLayout from '../../../layouts/LessonLayout.astro';
+import { RustPlayground } from '../../../components/editor/RustPlayground';
+
+const lessonInfo = {
+  title: "Variables et Mutabilite",
+  description: "Comprends pourquoi Rust rend les variables immutables par defaut",
+  moduleId: "01-fundamentals",
+  moduleName: "Fondamentaux",
+  lessonId: "03-variables",
+  prevLesson: { id: "02-installation", title: "Installation et Cargo" },
+  nextLesson: { id: "04-types", title: "Types de Donnees" }
+};
+---
+
+<LessonLayout {...lessonInfo}>
+  <h2>Immutable par defaut</h2>
+
+  <p>
+    En Rust, les variables sont <strong>immutables par defaut</strong>. C'est l'inverse de la plupart des langages !
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    let x = 5;
+    println!("x = {}", x);
+
+    // Decommente la ligne suivante pour voir l'erreur
+    // x = 6;  // ERREUR: cannot assign twice to immutable variable
+}`}
+    />
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+    <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3">Comparaison Swift/Dart</h3>
+    <div class="grid md:grid-cols-3 gap-4 font-mono text-sm">
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Rust (immutable)</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">let x = 5;</pre>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Swift</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">let x = 5</pre>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Dart</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">final x = 5;</pre>
+      </div>
+    </div>
+  </div>
+
+  <h2>Rendre une variable mutable avec <code>mut</code></h2>
+
+  <p>Pour modifier une variable, ajoute le mot-cle <code>mut</code> :</p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    let mut x = 5;
+    println!("x = {}", x);
+
+    x = 6;  // OK car x est mutable
+    println!("x = {}", x);
+
+    x += 10;  // Peut aussi utiliser +=, -=, etc.
+    println!("x = {}", x);
+}`}
+    />
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+    <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3">Comparaison Swift/Dart</h3>
+    <div class="grid md:grid-cols-3 gap-4 font-mono text-sm">
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Rust (mutable)</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">let mut x = 5;</pre>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Swift</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">var x = 5</pre>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Dart</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">var x = 5;</pre>
+      </div>
+    </div>
+  </div>
+
+  <h2>Shadowing : Redeclarer une variable</h2>
+
+  <p>
+    En Rust, tu peux <strong>redeclarer</strong> une variable avec le meme nom. C'est different de la mutation !
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    let x = 5;
+    println!("x = {}", x);
+
+    // Shadowing : on cree une NOUVELLE variable x
+    let x = x + 1;
+    println!("x = {}", x);
+
+    // On peut meme changer le type !
+    let x = "maintenant je suis un string";
+    println!("x = {}", x);
+
+    // Shadowing dans un scope interne
+    {
+        let x = x.len();  // x est un usize ici
+        println!("longueur de x = {}", x);
+    }
+
+    // x est toujours le string ici
+    println!("x = {}", x);
+}`}
+    />
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
+    <h3 class="text-lg font-semibold text-amber-700 dark:text-amber-400 mb-3">Shadowing vs Mutation</h3>
+    <div class="text-gray-700 dark:text-gray-300 space-y-2">
+      <p><strong>Shadowing (let x = ...)</strong></p>
+      <ul class="list-disc list-inside ml-4 space-y-1">
+        <li>Cree une nouvelle variable</li>
+        <li>Peut changer le type</li>
+        <li>L'ancienne valeur est "masquee"</li>
+      </ul>
+      <p class="mt-4"><strong>Mutation (x = ...)</strong></p>
+      <ul class="list-disc list-inside ml-4 space-y-1">
+        <li>Modifie la variable existante</li>
+        <li>Doit garder le meme type</li>
+        <li>Necessite <code>mut</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Constantes avec <code>const</code></h2>
+
+  <p>
+    Les <strong>constantes</strong> sont evaluees a la compilation et ne peuvent jamais changer :
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`// Les constantes doivent avoir un type explicite
+const MAX_POINTS: u32 = 100_000;
+const PI: f64 = 3.14159;
+const APP_NAME: &str = "RustMaster";
+
+fn main() {
+    println!("Points max: {}", MAX_POINTS);
+    println!("Pi: {}", PI);
+    println!("App: {}", APP_NAME);
+
+    // Note: les underscores dans les nombres sont ignores
+    // 100_000 == 100000 (plus lisible)
+    let million = 1_000_000;
+    println!("Un million: {}", million);
+}`}
+    />
+  </div>
+
+  <h2>Difference entre <code>let</code> et <code>const</code></h2>
+
+  <div class="not-prose my-8 overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <th class="text-left py-3 px-4 font-semibold">Aspect</th>
+          <th class="text-left py-3 px-4 font-semibold text-rust-500">let</th>
+          <th class="text-left py-3 px-4 font-semibold text-purple-500">const</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 dark:text-gray-400">
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">Evaluation</td>
+          <td class="py-3 px-4">Runtime</td>
+          <td class="py-3 px-4">Compilation</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">Type</td>
+          <td class="py-3 px-4">Infere automatiquement</td>
+          <td class="py-3 px-4">Obligatoire</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">Shadowing</td>
+          <td class="py-3 px-4">Oui</td>
+          <td class="py-3 px-4">Non</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4">Scope</td>
+          <td class="py-3 px-4">Local</td>
+          <td class="py-3 px-4">Global ou local</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Exercice : Jouons avec les variables</h2>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      title="Exercice"
+      description="Complete le code pour que tous les println! affichent la bonne valeur"
+      initialCode={`fn main() {
+    // 1. Declare une variable immutable 'age' avec la valeur 25
+
+    // 2. Declare une variable mutable 'score' avec la valeur 0
+
+    // 3. Incremente 'score' de 10
+
+    // 4. Utilise le shadowing pour convertir 'age' en String
+
+    // Verification (ne pas modifier)
+    // println!("Age: {}", age);  // Doit afficher "Age: 25"
+    // println!("Score: {}", score);  // Doit afficher "Score: 10"
+}`}
+    />
+  </div>
+
+  <h2>Points cles</h2>
+
+  <ul>
+    <li>Variables <strong>immutables par defaut</strong> avec <code>let</code></li>
+    <li>Utilise <code>let mut</code> pour rendre une variable mutable</li>
+    <li><strong>Shadowing</strong> permet de redeclarer avec <code>let</code> (meme changer le type)</li>
+    <li><code>const</code> pour les vraies constantes (evaluees a la compilation)</li>
+    <li>L'immutabilite par defaut rend le code plus sur et plus facile a raisonner</li>
+  </ul>
+
+  <div class="not-prose my-8 p-6 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+    <h3 class="text-lg font-semibold text-green-700 dark:text-green-400 mb-3">Pourquoi immutable par defaut ?</h3>
+    <p class="text-gray-700 dark:text-gray-300">
+      Ca force a etre explicite quand on veut modifier une valeur. Le compilateur peut optimiser
+      le code immutable, et c'est plus facile de raisonner sur du code ou les valeurs ne changent pas.
+    </p>
+  </div>
+</LessonLayout>

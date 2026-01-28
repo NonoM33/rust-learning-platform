@@ -1,0 +1,95 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { CompletionToggle } from '../components/lesson/CompletionToggle';
+
+interface Props {
+  title: string;
+  description: string;
+  moduleId: string;
+  moduleName: string;
+  lessonId: string;
+  prevLesson?: { id: string; title: string };
+  nextLesson?: { id: string; title: string };
+}
+
+const { title, description, moduleId, moduleName, lessonId, prevLesson, nextLesson } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <ol class="flex items-center gap-2 text-sm">
+        <li>
+          <a href="/lessons" class="text-gray-500 hover:text-rust-500">Modules</a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li>
+          <a href={`/lessons/${moduleId}`} class="text-gray-500 hover:text-rust-500">{moduleName}</a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 dark:text-white font-medium">{title}</li>
+      </ol>
+    </nav>
+
+    <!-- Lesson Header -->
+    <header class="mb-12">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        {title}
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400">
+        {description}
+      </p>
+    </header>
+
+    <!-- Lesson Content -->
+    <article class="prose prose-lg dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-rust-500 prose-code:text-rust-600 dark:prose-code:text-rust-400">
+      <slot />
+    </article>
+
+    <!-- Completion Toggle -->
+    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <CompletionToggle client:load lessonId={`${moduleId}/${lessonId}`} />
+    </div>
+
+    <!-- Navigation -->
+    <nav class="mt-8 flex items-center justify-between">
+      {prevLesson ? (
+        <a
+          href={`/lessons/${moduleId}/${prevLesson.id}`}
+          class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+          <span class="hidden sm:inline">{prevLesson.title}</span>
+          <span class="sm:hidden">Precedent</span>
+        </a>
+      ) : (
+        <div></div>
+      )}
+      {nextLesson ? (
+        <a
+          href={`/lessons/${moduleId}/${nextLesson.id}`}
+          class="flex items-center gap-2 px-4 py-2 bg-rust-500 text-white rounded-lg hover:bg-rust-600 transition-colors"
+        >
+          <span class="hidden sm:inline">{nextLesson.title}</span>
+          <span class="sm:hidden">Suivant</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      ) : (
+        <a
+          href={`/lessons/${moduleId}/quiz`}
+          class="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+        >
+          Passer le quiz
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </a>
+      )}
+    </nav>
+  </div>
+</BaseLayout>

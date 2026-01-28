@@ -1,0 +1,242 @@
+---
+import LessonLayout from '../../../layouts/LessonLayout.astro';
+import { RustPlayground } from '../../../components/editor/RustPlayground';
+
+const lessonInfo = {
+  title: "Installation et Cargo",
+  description: "Installe Rust et decouvre Cargo, le couteau suisse du developpeur Rust",
+  moduleId: "01-fundamentals",
+  moduleName: "Fondamentaux",
+  lessonId: "02-installation",
+  prevLesson: { id: "01-introduction", title: "Introduction a Rust" },
+  nextLesson: { id: "03-variables", title: "Variables et Mutabilite" }
+};
+---
+
+<LessonLayout {...lessonInfo}>
+  <h2>Installer Rust avec rustup</h2>
+
+  <p>
+    <strong>rustup</strong> est l'installeur officiel de Rust. Il gere les versions de Rust,
+    les toolchains, et les mises a jour.
+  </p>
+
+  <div class="not-prose my-6">
+    <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm">
+      <div class="text-gray-400 mb-2"># Sur macOS / Linux</div>
+      <div class="text-green-400">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</div>
+    </div>
+  </div>
+
+  <p>Apres l'installation, verifie que tout fonctionne :</p>
+
+  <div class="not-prose my-6">
+    <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm space-y-2">
+      <div class="text-green-400">rustc --version</div>
+      <div class="text-gray-400"># rustc 1.75.0 (ou plus recent)</div>
+      <div class="text-green-400 mt-2">cargo --version</div>
+      <div class="text-gray-400"># cargo 1.75.0 (ou plus recent)</div>
+    </div>
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
+    <h3 class="text-lg font-semibold text-amber-700 dark:text-amber-400 mb-3">Astuce macOS</h3>
+    <p class="text-gray-700 dark:text-gray-300">
+      Si tu as deja Xcode installe, tu as peut-etre deja une version de Rust via les Command Line Tools.
+      Utilise rustup pour gerer ta propre installation independante.
+    </p>
+  </div>
+
+  <h2>Qu'est-ce que Cargo ?</h2>
+
+  <p>
+    <strong>Cargo</strong> est l'equivalent de <code>pub</code> (Dart) ou <code>SPM/CocoaPods</code> (Swift),
+    mais en bien plus puissant :
+  </p>
+
+  <ul>
+    <li><strong>Build system</strong> - Compile ton code</li>
+    <li><strong>Package manager</strong> - Gere les dependances (crates)</li>
+    <li><strong>Test runner</strong> - Execute tes tests</li>
+    <li><strong>Doc generator</strong> - Genere la documentation</li>
+    <li><strong>Formatter</strong> - Formate ton code</li>
+    <li><strong>Linter</strong> - Verifie les bonnes pratiques</li>
+  </ul>
+
+  <h2>Creer un projet avec Cargo</h2>
+
+  <div class="not-prose my-6">
+    <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm space-y-2">
+      <div class="text-gray-400"># Creer un nouveau projet</div>
+      <div class="text-green-400">cargo new mon_projet</div>
+      <div class="text-green-400">cd mon_projet</div>
+      <div class="text-gray-400 mt-2"># Structure creee :</div>
+      <div class="text-gray-300">mon_projet/</div>
+      <div class="text-gray-300">├── Cargo.toml    # Manifest (comme pubspec.yaml)</div>
+      <div class="text-gray-300">└── src/</div>
+      <div class="text-gray-300">    └── main.rs   # Point d'entree</div>
+    </div>
+  </div>
+
+  <h3>Cargo.toml - Le manifest</h3>
+
+  <p>C'est l'equivalent du <code>pubspec.yaml</code> (Dart) ou <code>Package.swift</code> (Swift) :</p>
+
+  <div class="not-prose my-6">
+    <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm">
+      <pre class="text-gray-300">[package]
+name = "mon_projet"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Ajoute tes dependances ici
+# serde = "1.0"
+# tokio = { version = "1", features = ["full"] }</pre>
+    </div>
+  </div>
+
+  <h2>Commandes Cargo essentielles</h2>
+
+  <div class="not-prose my-8 overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <th class="text-left py-3 px-4 font-semibold">Commande</th>
+          <th class="text-left py-3 px-4 font-semibold">Description</th>
+          <th class="text-left py-3 px-4 font-semibold">Equivalent</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 dark:text-gray-400">
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4 font-mono text-rust-500">cargo new</td>
+          <td class="py-3 px-4">Nouveau projet</td>
+          <td class="py-3 px-4">flutter create</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4 font-mono text-rust-500">cargo build</td>
+          <td class="py-3 px-4">Compile le projet</td>
+          <td class="py-3 px-4">flutter build</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4 font-mono text-rust-500">cargo run</td>
+          <td class="py-3 px-4">Compile et execute</td>
+          <td class="py-3 px-4">flutter run</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4 font-mono text-rust-500">cargo test</td>
+          <td class="py-3 px-4">Execute les tests</td>
+          <td class="py-3 px-4">flutter test</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4 font-mono text-rust-500">cargo fmt</td>
+          <td class="py-3 px-4">Formate le code</td>
+          <td class="py-3 px-4">dart format</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4 font-mono text-rust-500">cargo clippy</td>
+          <td class="py-3 px-4">Linter intelligent</td>
+          <td class="py-3 px-4">dart analyze</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 font-mono text-rust-500">cargo doc</td>
+          <td class="py-3 px-4">Genere la doc</td>
+          <td class="py-3 px-4">dart doc</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>crates.io - Le pub.dev de Rust</h2>
+
+  <p>
+    <a href="https://crates.io" target="_blank" rel="noopener" class="text-rust-500">crates.io</a> est le
+    registre officiel des packages Rust (appelees <strong>crates</strong>).
+  </p>
+
+  <p>Pour ajouter une dependance :</p>
+
+  <div class="not-prose my-6">
+    <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm space-y-2">
+      <div class="text-gray-400"># Via la ligne de commande (recommande)</div>
+      <div class="text-green-400">cargo add serde</div>
+      <div class="text-green-400">cargo add tokio --features full</div>
+      <div class="text-gray-400 mt-3"># Ou manuellement dans Cargo.toml</div>
+      <div class="text-gray-300">[dependencies]</div>
+      <div class="text-gray-300">serde = "1.0"</div>
+    </div>
+  </div>
+
+  <h2>Debug vs Release</h2>
+
+  <p>Cargo compile en mode <strong>debug</strong> par defaut (rapide a compiler, lent a executer) :</p>
+
+  <div class="not-prose my-6">
+    <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm space-y-2">
+      <div class="text-gray-400"># Mode debug (defaut)</div>
+      <div class="text-green-400">cargo build</div>
+      <div class="text-gray-400"># Binaire dans: target/debug/</div>
+      <div class="text-gray-400 mt-3"># Mode release (optimise)</div>
+      <div class="text-green-400">cargo build --release</div>
+      <div class="text-gray-400"># Binaire dans: target/release/</div>
+    </div>
+  </div>
+
+  <div class="not-prose my-8 p-6 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+    <h3 class="text-lg font-semibold text-green-700 dark:text-green-400 mb-3">La difference de perf est enorme</h3>
+    <p class="text-gray-700 dark:text-gray-300">
+      En mode release, Rust applique des optimisations agressives. Un programme peut etre
+      <strong>10 a 100x plus rapide</strong> en release qu'en debug !
+    </p>
+  </div>
+
+  <h2>Essaie dans le playground</h2>
+
+  <p>
+    Tu n'as pas besoin d'installer Rust pour suivre ce cours - le playground execute du vrai code Rust.
+    Mais pour tes vrais projets, installe Rust localement !
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      title="Test Cargo concepts"
+      initialCode={`// Ce code utilise la crate "rand"
+// (deja disponible dans le playground)
+// En local : cargo add rand
+
+fn main() {
+    // Simule une structure de projet Cargo
+    let project = Project {
+        name: String::from("mon_super_projet"),
+        version: String::from("0.1.0"),
+    };
+
+    println!("Projet: {} v{}", project.name, project.version);
+    println!("Edition: 2021");
+
+    // Simule des dependances
+    let deps = vec!["serde", "tokio", "reqwest"];
+    println!("\\nDependances:");
+    for dep in deps {
+        println!("  - {}", dep);
+    }
+}
+
+struct Project {
+    name: String,
+    version: String,
+}`}
+    />
+  </div>
+
+  <h2>Points cles</h2>
+
+  <ul>
+    <li><strong>rustup</strong> installe et gere les versions de Rust</li>
+    <li><strong>Cargo</strong> est l'outil tout-en-un : build, test, format, lint, doc</li>
+    <li><strong>Cargo.toml</strong> est le manifest du projet (comme pubspec.yaml)</li>
+    <li><strong>crates.io</strong> est le registre des packages</li>
+    <li>Utilise <code>--release</code> pour la production</li>
+  </ul>
+</LessonLayout>

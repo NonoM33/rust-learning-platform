@@ -1,0 +1,171 @@
+---
+import LessonLayout from '../../../layouts/LessonLayout.astro';
+import { RustPlayground } from '../../../components/editor/RustPlayground';
+
+const lessonInfo = {
+  title: "Introduction a Rust",
+  description: "Decouvre pourquoi Rust est unique et parfait pour les devs venant de Swift/Dart",
+  moduleId: "01-fundamentals",
+  moduleName: "Fondamentaux",
+  lessonId: "01-introduction",
+  nextLesson: { id: "02-installation", title: "Installation et Cargo" }
+};
+---
+
+<LessonLayout {...lessonInfo}>
+  <h2>Pourquoi Rust ?</h2>
+
+  <p>
+    En tant que dev Flutter/iOS, tu connais deja des langages modernes et expressifs.
+    <strong>Rust</strong> va t'apporter quelque chose de nouveau : la <em>securite memoire sans garbage collector</em>.
+  </p>
+
+  <div class="not-prose my-8 p-6 bg-rust-50 dark:bg-rust-900/20 rounded-xl border border-rust-200 dark:border-rust-800">
+    <h3 class="text-lg font-semibold text-rust-700 dark:text-rust-400 mb-3">Les 3 garanties de Rust</h3>
+    <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+      <li class="flex items-start gap-2">
+        <span class="text-rust-500">1.</span>
+        <span><strong>Pas de null pointer</strong> - Option&lt;T&gt; remplace null</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-rust-500">2.</span>
+        <span><strong>Pas de data races</strong> - Le compilateur les empeche</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-rust-500">3.</span>
+        <span><strong>Pas de memory leaks</strong> - L'ownership gere tout</span>
+      </li>
+    </ul>
+  </div>
+
+  <h2>Rust vs Swift vs Dart</h2>
+
+  <p>Voici une comparaison rapide :</p>
+
+  <div class="not-prose overflow-x-auto my-6">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <th class="text-left py-3 px-4 font-semibold">Aspect</th>
+          <th class="text-left py-3 px-4 font-semibold text-rust-500">Rust</th>
+          <th class="text-left py-3 px-4 font-semibold text-blue-500">Swift</th>
+          <th class="text-left py-3 px-4 font-semibold text-cyan-500">Dart</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 dark:text-gray-400">
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">Gestion memoire</td>
+          <td class="py-3 px-4">Ownership</td>
+          <td class="py-3 px-4">ARC</td>
+          <td class="py-3 px-4">GC</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">Null safety</td>
+          <td class="py-3 px-4">Option&lt;T&gt;</td>
+          <td class="py-3 px-4">Optionals</td>
+          <td class="py-3 px-4">Nullable types</td>
+        </tr>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <td class="py-3 px-4">Erreurs</td>
+          <td class="py-3 px-4">Result&lt;T,E&gt;</td>
+          <td class="py-3 px-4">throws</td>
+          <td class="py-3 px-4">Exceptions</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4">Concurrence</td>
+          <td class="py-3 px-4">Send + Sync</td>
+          <td class="py-3 px-4">Actors</td>
+          <td class="py-3 px-4">Isolates</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Ton premier programme Rust</h2>
+
+  <p>
+    Traditionnellement, on commence par "Hello, World!". Essaie de modifier ce code et clique sur <strong>Executer</strong> :
+  </p>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      initialCode={`fn main() {
+    // println! est une macro (note le !)
+    // En Swift : print("Hello")
+    // En Dart : print("Hello");
+    println!("Hello, World!");
+
+    // Variables
+    let name = "Rustacean";
+    println!("Bienvenue, {} !", name);
+}`}
+    />
+  </div>
+
+  <h3>Ce qu'il faut retenir</h3>
+
+  <ul>
+    <li><code>fn main()</code> - Point d'entree du programme (comme <code>main()</code> en Dart)</li>
+    <li><code>println!</code> - C'est une <strong>macro</strong>, pas une fonction (le <code>!</code> l'indique)</li>
+    <li><code>let</code> - Declare une variable <strong>immutable</strong> par defaut</li>
+    <li><code>{"{}"}</code> - Placeholder pour les valeurs (comme <code>$variable</code> en Dart)</li>
+  </ul>
+
+  <div class="not-prose my-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+    <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3">Comparaison Swift/Dart</h3>
+    <div class="grid md:grid-cols-3 gap-4 font-mono text-sm">
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Rust</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">let x = 5;</pre>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Swift</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">let x = 5</pre>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">Dart</div>
+        <pre class="bg-gray-900 text-gray-100 p-3 rounded">final x = 5;</pre>
+      </div>
+    </div>
+  </div>
+
+  <h2>Exercice : Personnalise le message</h2>
+
+  <p>Modifie le code ci-dessous pour :</p>
+  <ol>
+    <li>Changer le message de bienvenue</li>
+    <li>Ajouter ton prenom dans une variable</li>
+    <li>Afficher un message personnalise</li>
+  </ol>
+
+  <div class="not-prose my-8">
+    <RustPlayground
+      client:only="react"
+      title="Exercice 1"
+      description="Personnalise le message de bienvenue"
+      initialCode={`fn main() {
+    // TODO: Cree une variable "prenom" avec ton prenom
+
+    // TODO: Affiche "Bienvenue [prenom] dans le monde de Rust!"
+
+    println!("A toi de jouer!");
+}`}
+    />
+  </div>
+
+  <h2>Points cles</h2>
+
+  <ul>
+    <li>Rust garantit la securite memoire <strong>a la compilation</strong></li>
+    <li>Pas de garbage collector = performances previsibles</li>
+    <li>La syntaxe est proche de Swift avec quelques differences</li>
+    <li><code>println!</code> est une macro, pas une fonction</li>
+    <li>Les variables sont <strong>immutables par defaut</strong></li>
+  </ul>
+
+  <p>
+    Dans la prochaine lecon, on va installer Rust et decouvrir <strong>Cargo</strong>,
+    le gestionnaire de paquets et build tool de Rust (pense a pub/CocoaPods, mais en mieux).
+  </p>
+</LessonLayout>

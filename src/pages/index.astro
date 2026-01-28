@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { RustPlayground } from '../components/editor/RustPlayground';
+
+const modules = [
+  { id: 1, title: 'Fondamentaux', desc: 'Cargo, syntaxe, types, match', lessons: 10, color: 'from-green-500 to-emerald-600' },
+  { id: 2, title: 'Ownership', desc: 'LE concept cle - move, copy, clone', lessons: 12, color: 'from-rust-500 to-orange-600' },
+  { id: 3, title: 'Borrowing', desc: '&T, &mut T, regles du borrow checker', lessons: 12, color: 'from-blue-500 to-cyan-600' },
+  { id: 4, title: 'Structs & Enums', desc: 'Option, Result, pattern matching', lessons: 15, color: 'from-purple-500 to-violet-600' },
+  { id: 5, title: 'Lifetimes', desc: "Annotations 'a, elision, structs", lessons: 12, color: 'from-pink-500 to-rose-600' },
+  { id: 6, title: 'Traits & Generics', desc: 'Polymorphisme, bounds, impl Trait', lessons: 15, color: 'from-amber-500 to-yellow-600' },
+];
+---
+
+<BaseLayout title="Deviens un expert Rust">
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-rust-500/10 via-transparent to-orange-500/10"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rust-100 dark:bg-rust-900/30 text-rust-700 dark:text-rust-400 text-sm font-medium mb-6">
+            <span class="w-2 h-2 bg-rust-500 rounded-full animate-pulse"></span>
+            Pour developpeurs Flutter/iOS
+          </div>
+          <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            Deviens une <span class="text-rust-500">brute</span> en Rust
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+            Apprends Rust de zero a expert avec des exercices interactifs, un playground integre, et des comparaisons avec Swift/Dart.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="/lessons" class="px-8 py-3 bg-rust-500 hover:bg-rust-600 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-rust-500/25">
+              Commencer l'aventure
+            </a>
+            <a href="/playground" class="px-8 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-xl transition-colors">
+              Essayer le Playground
+            </a>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <RustPlayground
+            client:only="react"
+            initialCode={`// Bienvenue en Rust !
+fn main() {
+    let message = "Hello, futur Rustacean!";
+    println!("{}", message);
+
+    // Essaie de modifier ce code !
+    for i in 1..=3 {
+        println!("Iteration {}", i);
+    }
+}`}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 bg-gray-50 dark:bg-gray-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Pourquoi ce cours ?
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Concu specifiquement pour les devs Flutter/iOS qui veulent maitriser Rust
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-14 h-14 bg-rust-100 dark:bg-rust-900/30 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-rust-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Playground Integre</h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            Execute du vrai code Rust directement dans ton navigateur. Pas besoin d'installer quoi que ce soit pour commencer.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Comparaisons Swift/Dart</h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            Chaque concept est explique avec des paralleles vers Swift et Dart pour accelerer ton apprentissage.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">180+ Exercices</h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            Des exercices pratiques pour chaque concept. Apprends en codant, pas juste en lisant.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modules Preview -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          12 Modules Progressifs
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Du debutant a l'expert, chaque module construit sur le precedent
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {modules.map((module) => (
+          <a
+            href={`/lessons/${module.id.toString().padStart(2, '0')}-${module.title.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
+            class="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+          >
+            <div class={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity`}></div>
+            <div class="flex items-start gap-4">
+              <div class={`w-12 h-12 rounded-xl bg-gradient-to-br ${module.color} flex items-center justify-center text-white font-bold text-lg flex-shrink-0`}>
+                {module.id}
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{module.title}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">{module.desc}</p>
+                <span class="text-xs text-gray-500 dark:text-gray-500">{module.lessons} lecons</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="text-center mt-12">
+        <a href="/lessons" class="inline-flex items-center gap-2 text-rust-500 hover:text-rust-600 font-semibold">
+          Voir tous les modules
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-gradient-to-br from-rust-500 to-orange-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+        Pret a devenir un Rustacean ?
+      </h2>
+      <p class="text-xl text-white/80 mb-8">
+        Commence maintenant et rejoins la communaute des developpeurs Rust
+      </p>
+      <a href="/lessons/01-fundamentals/01-introduction" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-rust-600 font-semibold rounded-xl hover:bg-gray-100 transition-colors shadow-lg">
+        Commencer la premiere lecon
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

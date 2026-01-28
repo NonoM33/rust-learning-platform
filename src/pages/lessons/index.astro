@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const modules = [
+  {
+    id: '01-fundamentals',
+    number: 1,
+    title: 'Fondamentaux',
+    description: 'Decouvre Rust: installation, Cargo, syntaxe de base, types et controle de flux.',
+    lessons: [
+      { id: '01-introduction', title: 'Introduction a Rust', duration: '10 min' },
+      { id: '02-installation', title: 'Installation et Cargo', duration: '15 min' },
+      { id: '03-variables', title: 'Variables et Mutabilite', duration: '12 min' },
+      { id: '04-types', title: 'Types de Donnees', duration: '15 min' },
+      { id: '05-functions', title: 'Fonctions', duration: '12 min' },
+      { id: '06-control-flow', title: 'Controle de Flux', duration: '15 min' },
+      { id: '07-match', title: 'Pattern Matching avec match', duration: '18 min' },
+    ],
+    color: 'from-green-500 to-emerald-600',
+    icon: '🚀',
+  },
+  {
+    id: '02-ownership',
+    number: 2,
+    title: 'Ownership',
+    description: 'LE concept cle de Rust. Comprends comment Rust gere la memoire sans garbage collector.',
+    lessons: [
+      { id: '01-what-is-ownership', title: "Qu'est-ce que l'Ownership?", duration: '20 min' },
+      { id: '02-move-semantics', title: 'Move Semantics', duration: '18 min' },
+      { id: '03-copy-clone', title: 'Copy vs Clone', duration: '15 min' },
+      { id: '04-ownership-functions', title: 'Ownership et Fonctions', duration: '15 min' },
+    ],
+    color: 'from-rust-500 to-orange-600',
+    icon: '🔑',
+  },
+  {
+    id: '03-borrowing',
+    number: 3,
+    title: 'Borrowing & References',
+    description: 'Partage l\'acces aux donnees sans transferer l\'ownership grace aux references.',
+    lessons: [
+      { id: '01-references', title: 'References Immutables', duration: '15 min' },
+      { id: '02-mutable-references', title: 'References Mutables', duration: '15 min' },
+      { id: '03-slices', title: 'Slices', duration: '18 min' },
+    ],
+    color: 'from-blue-500 to-cyan-600',
+    icon: '🔗',
+  },
+  {
+    id: '04-structs-enums',
+    number: 4,
+    title: 'Structs, Enums & Pattern Matching',
+    description: 'Modelise tes donnees avec structs et enums. Maitriser Option et Result.',
+    lessons: [
+      { id: '01-structs', title: 'Definir des Structs', duration: '15 min' },
+      { id: '02-methods', title: 'Methodes et impl', duration: '18 min' },
+      { id: '03-enums', title: 'Enums avec Donnees', duration: '15 min' },
+      { id: '04-option', title: 'Option<T>', duration: '12 min' },
+      { id: '05-result', title: 'Result<T, E>', duration: '15 min' },
+    ],
+    color: 'from-purple-500 to-violet-600',
+    icon: '📦',
+  },
+  {
+    id: '05-lifetimes',
+    number: 5,
+    title: 'Lifetimes',
+    description: 'Comprends les lifetimes pour gerer les references de maniere sure.',
+    lessons: [
+      { id: '01-lifetime-basics', title: 'Introduction aux Lifetimes', duration: '20 min' },
+      { id: '02-lifetime-annotations', title: 'Annotations de Lifetime', duration: '18 min' },
+      { id: '03-lifetime-elision', title: 'Elision de Lifetime', duration: '12 min' },
+    ],
+    color: 'from-pink-500 to-rose-600',
+    icon: '⏳',
+  },
+  {
+    id: '06-traits-generics',
+    number: 6,
+    title: 'Traits & Generics',
+    description: 'Polymorphisme en Rust avec les traits et les types generiques.',
+    lessons: [
+      { id: '01-generics', title: 'Types Generiques', duration: '18 min' },
+      { id: '02-traits', title: 'Definir des Traits', duration: '15 min' },
+      { id: '03-trait-bounds', title: 'Trait Bounds', duration: '15 min' },
+      { id: '04-impl-trait', title: 'impl Trait', duration: '12 min' },
+    ],
+    color: 'from-amber-500 to-yellow-600',
+    icon: '🎭',
+  },
+];
+---
+
+<BaseLayout title="Modules d'apprentissage">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header -->
+    <div class="mb-12">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Modules d'apprentissage
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl">
+        12 modules progressifs pour te faire passer de debutant a expert en Rust. Chaque module contient des lecons, des exercices pratiques et un quiz.
+      </p>
+    </div>
+
+    <!-- Modules Grid -->
+    <div class="space-y-8">
+      {modules.map((module) => (
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700">
+          <!-- Module Header -->
+          <div class={`bg-gradient-to-r ${module.color} p-6`}>
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">{module.icon}</span>
+              <div>
+                <div class="text-white/80 text-sm font-medium mb-1">Module {module.number}</div>
+                <h2 class="text-2xl font-bold text-white">{module.title}</h2>
+                <p class="text-white/80 mt-1">{module.description}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lessons List -->
+          <div class="p-6">
+            <div class="grid gap-3">
+              {module.lessons.map((lesson, index) => (
+                <a
+                  href={`/lessons/${module.id}/${lesson.id}`}
+                  class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors group"
+                >
+                  <div class="flex items-center gap-4">
+                    <span class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-sm font-medium text-gray-600 dark:text-gray-400 group-hover:bg-rust-500 group-hover:text-white transition-colors">
+                      {index + 1}
+                    </span>
+                    <span class="font-medium text-gray-900 dark:text-white">{lesson.title}</span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-500 dark:text-gray-500">{lesson.duration}</span>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-rust-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            <!-- Quiz Link -->
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <a
+                href={`/lessons/${module.id}/quiz`}
+                class="flex items-center justify-between p-4 rounded-xl bg-rust-50 dark:bg-rust-900/20 hover:bg-rust-100 dark:hover:bg-rust-900/30 transition-colors"
+              >
+                <div class="flex items-center gap-4">
+                  <span class="w-8 h-8 rounded-full bg-rust-500 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </span>
+                  <span class="font-medium text-rust-700 dark:text-rust-400">Quiz du module</span>
+                </div>
+                <svg class="w-5 h-5 text-rust-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="mt-12 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-400">
+        <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+        6 modules supplementaires arrivent bientot !
+      </div>
+    </div>
+  </div>
+</BaseLayout>

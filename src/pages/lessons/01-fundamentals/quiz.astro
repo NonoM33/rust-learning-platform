@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { Quiz } from '../../../components/quiz/Quiz';
+
+const quiz = {
+  id: "quiz-01-fundamentals",
+  title: "Quiz - Module 1 : Fondamentaux",
+  description: "Teste tes connaissances sur les bases de Rust",
+  moduleId: "01-fundamentals",
+  passingScore: 70,
+  questions: [
+    {
+      id: "q1",
+      type: "multiple-choice" as const,
+      question: "Comment declarer une variable mutable en Rust ?",
+      options: ["var x = 5;", "let mut x = 5;", "mut let x = 5;", "let x: mut = 5;"],
+      correctAnswer: "let mut x = 5;",
+      explanation: "En Rust, on utilise 'let mut' pour declarer une variable mutable. 'let' seul cree une variable immutable.",
+      hint: "Le mot-cle 'mut' vient apres 'let'"
+    },
+    {
+      id: "q2",
+      type: "code-output" as const,
+      question: "Que va afficher ce code ?",
+      code: "fn main() {\n    let x = 5;\n    let x = x + 1;\n    println!(\"{}\", x);\n}",
+      options: ["5", "6", "Erreur de compilation", "Erreur de runtime"],
+      correctAnswer: "6",
+      explanation: "C'est du shadowing : on cree une nouvelle variable x avec la valeur 6. Ce n'est pas une mutation, donc pas besoin de 'mut'."
+    },
+    {
+      id: "q3",
+      type: "multiple-choice" as const,
+      question: "Quelle est la difference entre '&str' et 'String' ?",
+      options: [
+        "&str est mutable, String est immutable",
+        "&str est une reference, String est une valeur possedee",
+        "Aucune difference, c'est la meme chose",
+        "&str est pour les caracteres, String pour les phrases"
+      ],
+      correctAnswer: "&str est une reference, String est une valeur possedee",
+      explanation: "&str est une 'string slice' - une reference a une chaine. String est une chaine sur le heap que tu possedes et peux modifier."
+    },
+    {
+      id: "q4",
+      type: "true-false" as const,
+      question: "En Rust, les variables sont mutables par defaut.",
+      options: ["Vrai", "Faux"],
+      correctAnswer: "Faux",
+      explanation: "C'est l'inverse ! Les variables sont immutables par defaut en Rust. Il faut ajouter 'mut' pour les rendre mutables."
+    },
+    {
+      id: "q5",
+      type: "multiple-choice" as const,
+      question: "Quel est le type par defaut d'un nombre entier en Rust ?",
+      options: ["i8", "i32", "i64", "isize"],
+      correctAnswer: "i32",
+      explanation: "Par defaut, les litteraux entiers sont de type i32 en Rust, sauf si le contexte necessite un autre type."
+    },
+    {
+      id: "q6",
+      type: "code-output" as const,
+      question: "Que va afficher ce code ?",
+      code: "fn main() {\n    let arr = [1, 2, 3];\n    println!(\"{}\", arr.len());\n}",
+      options: ["3", "[1, 2, 3]", "Erreur", "12"],
+      correctAnswer: "3",
+      explanation: "La methode len() retourne le nombre d'elements dans l'array, qui est 3."
+    },
+    {
+      id: "q7",
+      type: "multiple-choice" as const,
+      question: "Comment creer un array de 5 zeros en Rust ?",
+      options: ["[0, 0, 0, 0, 0]", "[0; 5]", "Array(5, 0)", "zeros(5)"],
+      correctAnswer: "[0; 5]",
+      explanation: "La syntaxe [valeur; taille] cree un array rempli de la valeur repetee. [0; 5] cree [0, 0, 0, 0, 0]."
+    },
+    {
+      id: "q8",
+      type: "multiple-choice" as const,
+      question: "Quel outil Rust gere les dependances et la compilation ?",
+      options: ["rustc", "cargo", "rustup", "crates"],
+      correctAnswer: "cargo",
+      explanation: "Cargo est le gestionnaire de paquets et build system de Rust. rustc est le compilateur, rustup gere les versions de Rust."
+    },
+    {
+      id: "q9",
+      type: "code-output" as const,
+      question: "Que va afficher ce code ?",
+      code: "fn main() {\n    let tup = (10, 'a', true);\n    println!(\"{}\", tup.1);\n}",
+      options: ["10", "a", "true", "Erreur"],
+      correctAnswer: "a",
+      explanation: "On accede aux elements d'un tuple par leur index (commence a 0). tup.1 est le deuxieme element, 'a'."
+    },
+    {
+      id: "q10",
+      type: "true-false" as const,
+      question: "println! est une fonction en Rust.",
+      options: ["Vrai", "Faux"],
+      correctAnswer: "Faux",
+      explanation: "println! est une macro, pas une fonction. Le point d'exclamation (!) indique que c'est une macro."
+    }
+  ]
+};
+---
+
+<BaseLayout title={quiz.title}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <ol class="flex items-center gap-2 text-sm">
+        <li>
+          <a href="/lessons" class="text-gray-500 hover:text-rust-500">Modules</a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li>
+          <a href="/lessons/01-fundamentals" class="text-gray-500 hover:text-rust-500">Fondamentaux</a>
+        </li>
+        <li class="text-gray-400">/</li>
+        <li class="text-gray-900 dark:text-white font-medium">Quiz</li>
+      </ol>
+    </nav>
+
+    <Quiz client:only="react" quiz={quiz} />
+  </div>
+</BaseLayout>

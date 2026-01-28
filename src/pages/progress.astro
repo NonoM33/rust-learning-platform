@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProgressBar from '../components/common/ProgressBar.astro';
+---
+
+<BaseLayout title="Ma Progression">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+      Ma Progression
+    </h1>
+
+    <!-- Overall Progress -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        Progression globale
+      </h2>
+      <div id="overall-progress">
+        <ProgressBar percentage={0} size="lg" />
+      </div>
+      <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+        <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+          <div id="lessons-completed" class="text-3xl font-bold text-rust-500">0</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Lecons terminees</div>
+        </div>
+        <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+          <div id="quizzes-completed" class="text-3xl font-bold text-green-500">0</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Quiz reussis</div>
+        </div>
+        <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+          <div id="avg-score" class="text-3xl font-bold text-blue-500">-</div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">Score moyen</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module Progress -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        Progression par module
+      </h2>
+      <div id="module-progress" class="space-y-4">
+        <!-- Will be populated by JS -->
+        <div class="text-gray-500 dark:text-gray-500">Chargement...</div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        Activite recente
+      </h2>
+      <div id="recent-activity" class="space-y-3">
+        <!-- Will be populated by JS -->
+        <div class="text-gray-500 dark:text-gray-500">Aucune activite pour le moment</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-wrap gap-4">
+      <a href="/lessons" class="px-6 py-3 bg-rust-500 hover:bg-rust-600 text-white font-medium rounded-xl transition-colors">
+        Continuer l'apprentissage
+      </a>
+      <button id="reset-progress" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-colors">
+        Reinitialiser la progression
+      </button>
+      <button id="export-progress" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-colors">
+        Exporter les donnees
+      </button>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { getProgress, resetProgress, getCompletionPercentage } from '../lib/progress-store';
+
+  const modules = [
+    { id: '01-fundamentals', name: 'Fondamentaux', totalLessons: 7 },
+    { id: '02-ownership', name: 'Ownership', totalLessons: 4 },
+    { id: '03-borrowing', name: 'Borrowing', totalLessons: 3 },
+    { id: '04-structs-enums', name: 'Structs & Enums', totalLessons: 5 },
+    { id: '05-lifetimes', name: 'Lifetimes', totalLessons: 3 },
+    { id: '06-traits-generics', name: 'Traits & Generics', totalLessons: 4 },
+  ];
+
+  const totalLessons = modules.reduce((acc, m) => acc + m.totalLessons, 0);
+
+  function updateUI() {
+    const progress = getProgress();
+
+    // Overall stats
+    const lessonsCompleted = progress.lessonsCompleted.filter(l => l.completed).length;
+    const quizzesCompleted = progress.quizzesCompleted.length;
+    const avgScore = quizzesCompleted > 0
+      ? Math.round(progress.quizzesCompleted.reduce((acc, q) => acc + q.score, 0) / quizzesCompleted)
+      : null;
+
+    document.getElementById('lessons-completed')!.textContent = lessonsCompleted.toString();
+    document.getElementById('quizzes-completed')!.textContent = quizzesCompleted.toString();
+    document.getElementById('avg-score')!.textContent = avgScore ? `${avgScore}%` : '-';
+
+    // Update progress bar
+    const percentage = getCompletionPercentage(totalLessons);
+    const progressBar = document.querySelector('#overall-progress .bg-gradient-to-r');
+    if (progressBar) {
+      (progressBar as HTMLElement).style.width = `${percentage}%`;
+    }
+    const percentageText = document.querySelector('#overall-progress .text-rust-500');
+    if (percentageText) {
+      percentageText.textContent = `${percentage}%`;
+    }
+
+    // Module progress
+    const moduleProgressEl = document.getElementById('module-progress')!;
+    moduleProgressEl.innerHTML = modules.map(module => {
+      const moduleLessons = progress.lessonsCompleted.filter(
+        l => l.lessonId.startsWith(module.id) && l.completed
+      ).length;
+      const modulePercent = Math.round((moduleLessons / module.totalLessons) * 100);
+
+      return `
+        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
+          <div class="flex-1 mr-4">
+            <div class="flex justify-between mb-2">
+              <span class="font-medium text-gray-900 dark:text-white">${module.name}</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400">${moduleLessons}/${module.totalLessons}</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div class="bg-rust-500 h-2 rounded-full transition-all" style="width: ${modulePercent}%"></div>
+            </div>
+          </div>
+          <a href="/lessons/${module.id}" class="text-rust-500 hover:text-rust-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      `;
+    }).join('');
+
+    // Recent activity
+    const recentActivityEl = document.getElementById('recent-activity')!;
+    const recentLessons = progress.lessonsCompleted
+      .filter(l => l.completed && l.completedAt)
+      .sort((a, b) => new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime())
+      .slice(0, 5);
+
+    if (recentLessons.length > 0) {
+      recentActivityEl.innerHTML = recentLessons.map(lesson => {
+        const date = new Date(lesson.completedAt!);
+        const dateStr = date.toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'short',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        return `
+          <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </span>
+              <span class="text-gray-900 dark:text-white">${lesson.lessonId}</span>
+            </div>
+            <span class="text-sm text-gray-500">${dateStr}</span>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // Initial render
+  updateUI();
+
+  // Reset button
+  document.getElementById('reset-progress')?.addEventListener('click', () => {
+    if (confirm('Es-tu sur de vouloir reinitialiser ta progression? Cette action est irreversible.')) {
+      resetProgress();
+      updateUI();
+    }
+  });
+
+  // Export button
+  document.getElementById('export-progress')?.addEventListener('click', () => {
+    const progress = getProgress();
+    const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rust-master-progress.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+</script>
